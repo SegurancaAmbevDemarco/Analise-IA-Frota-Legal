@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação IA Inspeções</title>
+  <meta name="description" content="Painel de acertos da IA na validação de inspeções.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Validação da IA nas inspeções <span class="cliente" id="clienteTag"></span></h1>
+      <p class="sub" id="rule"></p>
+    </div>
+    <label class="toggle" for="exigirTraco"><input type="checkbox" id="exigirTraco" checked> Exigir traço (-) na observação</label>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Cliente"></nav>
+
+  <section class="card filters" aria-label="Filtros">
+    <div class="field"><label for="fAno">Ano</label><select id="fAno"><option value="">Todos</option></select></div>
+    <div class="field"><label for="fMes">Mês</label><select id="fMes"><option value="">Todos</option></select></div>
+    <div class="field"><label for="fDia">Dia</label><select id="fDia"><option value="">Todos</option></select></div>
+    <div class="field"><label for="fPlaca">Placa</label><input type="text" id="fPlaca" placeholder="Ex.: UMJ3C95" autocomplete="off"></div>
+    <div class="field"><label for="fErro">Erro</label>
+      <select id="fErro"><option value="">Todos</option><option>Traseira</option><option>Lateral</option><option>Frente</option><option>Ambos</option></select></div>
+    <div class="field"><label for="fMotivo">Motivo</label><select id="fMotivo"><option value="">Todos</option></select></div>
+    <div class="field"><label for="fRes">Resultado</label>
+      <select id="fRes"><option value="">Todos</option><option value="ok">OK</option><option value="nok">NOK</option></select></div>
+    <div class="field"><button id="btnLimpar" type="button">Limpar filtros</button></div>
+  </section>
+
+  <div class="count" id="contagem" aria-live="polite"></div>
+
+  <div id="resumo" class="resumo">
+  <section class="kpis" id="kpis" aria-label="Indicadores"></section>
+
+  <section class="charts">
+    <div class="card">
+      <div class="chead">
+        <h2 id="tituloDias">Validações por dia</h2>
+        <div class="legend"><span><i class="sw" style="background:var(--good)"></i>OK</span><span><i class="sw" style="background:var(--crit)"></i>NOK</span></div>
+      </div>
+      <div id="chartDias"></div>
+    </div>
+    <div class="card">
+      <div class="chead"><h2>Onde a IA errou</h2><span class="count" id="errosTotal"></span></div>
+      <div class="erros" id="chartErros"></div>
+    </div>
+  </section>
+  </div>
+
+  <section class="card" id="planilha">
+    <h2>Planilha</h2>
+    <p class="status" id="fonte">Carregando a base…</p>
+    <div id="avisoLocal" class="banner info" hidden></div>
+    <div class="tools">
+      <button type="button" id="btnImportar">Abrir outra planilha (.xlsx ou .csv)</button>
+      <input type="file" id="arquivo" accept=".xlsx,.xls,.csv" hidden>
+      <button type="button" id="btnRecarregar">Recarregar a base do repositório</button>
+      <button type="button" id="btnExportar">Exportar filtro (CSV)</button>
+      <button type="button" id="btnPdf" class="primary">Baixar PDF</button>
+    </div>
+    <p class="hint">A base compartilhada deste cliente é o arquivo <code id="arqNome"></code> do repositório. A planilha aberta aqui vale só neste navegador e some ao recarregar a página.</p>
+  </section>
+
+  <section class="card">
+    <div class="chead"><h2>Registros</h2><span class="count" id="tabInfo"></span></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Placa</th><th>Data da validação</th><th>Observação</th><th>Motivo</th><th>Resultado</th><th>Erro</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="more"><button type="button" id="btnMais" hidden>Mostrar mais</button></div>
+  </section>
+</div>
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/html2canvas.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
