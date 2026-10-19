@@ -4,21 +4,21 @@ Painel que mostra quantas inspeções a IA validou certo (OK) e quantas errou (N
 
 ## Como a página decide OK e NOK
 
-A coluna usada é **Observação**.
+A coluna usada é **Observação** (ela fica só na planilha e não aparece na tela).
 
 - Observação em branco: **OK**.
-- Observação com um traço (`-`) e uma das palavras **Traseira**, **Lateral**, **Frente** ou **Ambos**: **NOK**. Maiúsculas, minúsculas e acentos não importam. Exemplos: `- Lateral`, `- foto lateral`, `- FRENTE`.
-- No topo da página, a opção **Exigir traço (-)** pode ser desmarcada. Aí basta a observação citar uma das quatro palavras.
+- Observação que cita **Traseira**, **Lateral**, **Frente** ou **Ambos**: **NOK**, com ou sem traço. Maiúsculas, minúsculas e acentos não importam. Exemplos: `Lateral`, `- foto lateral`, `FRENTE`.
 
 ## O que o painel mostra
 
 - Taxa de acerto, total de validações, OK e NOK.
 - Gráfico de validações por dia (por mês quando o período é longo).
 - Gráfico de onde a IA errou: Traseira, Lateral, Frente e Ambos.
-- Tabela de registros com resultado e tipo de erro.
+- Tabela de registros com placa, data, motivo, resultado e tipo de erro.
 - Filtros por ano, mês, dia, placa (basta digitar parte dela), tipo de erro, motivo e resultado.
 - Uma aba para cada cliente (AMBEV REVENDA e AMBEV SPOT T1), cada uma com a sua planilha. O endereço `#ambev-revenda` ou `#ambev-spot-t1` no final do link abre direto no cliente.
 - Botão **Baixar PDF**: gera um PDF (A4 paisagem) com os indicadores e gráficos no mesmo layout da tela, mais a lista de registros do filtro atual.
+- Botão **Atualizar** para reler a base do repositório.
 - Botão para exportar o filtro atual em CSV.
 
 ## Como a base é atualizada
@@ -35,8 +35,6 @@ Para atualizar:
 3. Clique em **Commit changes**. Em um ou dois minutos a página publicada passa a mostrar a base nova.
 
 A planilha precisa ter uma linha de títulos com as colunas **Identificador** (ou **Placa**), **Observação**, **Data Validação** e **Motivo**. A coluna Motivo pode ficar vazia; quando tiver texto, o filtro de Motivo lista os valores encontrados. Outras colunas são ignoradas. Linhas sem placa ou sem data são ignoradas, e linhas com a mesma placa e a mesma data e hora contam uma vez só.
-
-O botão **Abrir outra planilha** abre um arquivo só no navegador de quem clicou, para o cliente da aba atual, sem mexer na base do repositório. Ao recarregar a página, volta a base do repositório.
 
 ### Como incluir outro cliente
 
@@ -61,7 +59,7 @@ O navegador bloqueia a leitura das planilhas em `dados` quando o `index.html` é
 python3 -m http.server 8000
 ```
 
-E abra `http://localhost:8000`. Também dá para abrir o `index.html` direto e usar o botão **Abrir outra planilha**.
+E abra `http://localhost:8000`.
 
 ## Estrutura
 
