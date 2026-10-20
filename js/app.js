@@ -13,9 +13,17 @@ var MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto
 var PAGE=50;
 var $=function(id){return document.getElementById(id)};
 
+<<<<<<< HEAD
 var state={rows:[],all:[],cur:CLIENTES[0].id,f:{ano:'',mes:'',dia:'',placa:'',erro:'',res:'',motivo:''},show:PAGE,loaded:false,origem:'repo',erroCarga:''};
 var lastRows=[];
 
+=======
+var state={rows:[],all:[],exigirTraco:true,cur:CLIENTES[0].id,f:{ano:'',mes:'',dia:'',placa:'',erro:'',res:'',motivo:''},show:PAGE,loaded:false,origem:'repo',erroCarga:''};
+var lastRows=[];
+
+try{var sv=localStorage.getItem('exigirTraco');if(sv!==null){state.exigirTraco=sv==='1'}}catch(e){}
+$('exigirTraco').checked=state.exigirTraco;
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
 
 /* ---------- regras ---------- */
 function norm(s){return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()}
@@ -23,6 +31,10 @@ function normPlaca(s){return String(s==null?'':s).toUpperCase().replace(/[^A-Z0-
 function classify(obs){
   var n=norm(obs).trim();
   if(!n) return {ok:true,erros:[]};
+<<<<<<< HEAD
+=======
+  if(state.exigirTraco && n.indexOf('-')<0) return {ok:true,erros:[]};
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
   var erros=ERROS.filter(function(e){return n.indexOf(norm(e))>=0});
   return {ok:erros.length===0,erros:erros};
 }
@@ -159,13 +171,24 @@ function renderTabela(rows){
   else tb.innerHTML=vis.map(function(r){
     var res=r.ok?'<span class="pill ok"><i class="ico ok">✓</i>OK</span>':'<span class="pill nok"><i class="ico nok">✕</i>NOK</span>';
     var er=r.erros.map(function(e){return '<span class="chip"><i class="sw" style="background:'+ERRCOR[e]+'"></i>'+e+'</span>'}).join('')||'<span class="count">—</span>';
+<<<<<<< HEAD
     return '<tr><td class="placa">'+esc(r.placa)+'</td><td class="mono">'+fmtData(r.data)+'</td><td class="obs">'+(esc(r.motivo)||'<span class="count">—</span>')+'</td><td>'+res+'</td><td>'+er+'</td></tr>';
+=======
+    return '<tr><td class="placa">'+esc(r.placa)+'</td><td class="mono">'+fmtData(r.data)+'</td><td class="obs">'+(esc(r.obs)||'<span class="count">(em branco)</span>')+'</td><td class="obs">'+(esc(r.motivo)||'<span class="count">—</span>')+'</td><td>'+res+'</td><td>'+er+'</td></tr>';
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
   }).join('');
   $('btnMais').hidden=vis.length>=rows.length;
 }
 
 function renderRegra(){
+<<<<<<< HEAD
   $('rule').textContent='É considerado NOK quando a observação cita '+ERROS.join(', ')+'. Observação em branco conta como OK.';
+=======
+  var l=ERROS.join(', ');
+  $('rule').textContent=(state.exigirTraco
+    ?'NOK quando a observação tem um traço (-) e cita '+l+'. '
+    :'NOK quando a observação cita '+l+'. ')+'Maiúsculas e minúsculas não importam. Observação em branco conta como OK.';
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
 }
 
 function renderAll(){
@@ -231,6 +254,15 @@ function exibir(){
   var o=cache[state.cur]||{loaded:false,rows:[],fonte:'Carregando a base…'};
   state.rows=o.rows;state.loaded=o.loaded;state.erroCarga=o.erroCarga||'';state.origem=o.origem||'repo';state.show=PAGE;
   $('fonte').textContent=o.fonte;
+<<<<<<< HEAD
+=======
+  var av=$('avisoLocal');
+  if(o.origem==='local'){
+    av.hidden=false;
+    av.innerHTML='Você está vendo uma planilha que só existe neste navegador. Os colegas continuam vendo a base do repositório. <button type="button" id="btnVoltar">Voltar para a base do repositório</button>';
+    $('btnVoltar').onclick=function(){carregarRepo()};
+  }else av.hidden=true;
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
   renderAll();
 }
 function dataBr(d){return p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear()+' '+p2(d.getHours())+':'+p2(d.getMinutes())}
@@ -258,7 +290,11 @@ async function carregarRepo(id){
     if(lm){var d=new Date(lm);if(!isNaN(d))quando=dataBr(d)}
     aplicar(id,res,'repo',c.arquivo,quando);
   }catch(e){
+<<<<<<< HEAD
     falhar(id,'Não consegui ler '+c.arquivo+'. Se você abriu o index.html direto do computador, o navegador bloqueia a leitura: publique no GitHub Pages ou rode um servidor local (python3 -m http.server).');
+=======
+    falhar(id,'Não consegui ler '+c.arquivo+'. Se você abriu o index.html direto do computador, o navegador bloqueia a leitura: use "Abrir outra planilha" ou publique no GitHub Pages.');
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
   }
 }
 
@@ -337,6 +373,7 @@ async function baixarPdf(){
       doc.text('Registros · '+c.nome+' ('+rows.length+')',M,M+4);
       doc.autoTable({
         startY:M+8,margin:{left:M,right:M,bottom:12},
+<<<<<<< HEAD
         head:[['Placa','Data da validação','Motivo','Resultado','Erro']],
         body:rows.map(function(r){return [r.placa,fmtData(r.data),r.motivo,r.ok?'OK':'NOK',r.erros.join(' + ')]}),
         styles:{font:'helvetica',fontSize:8,cellPadding:1.6,textColor:[11,11,11],lineColor:[225,224,217],lineWidth:.1},
@@ -344,6 +381,15 @@ async function baixarPdf(){
         columnStyles:{0:{fontStyle:'bold',cellWidth:28},1:{cellWidth:36},3:{cellWidth:22},4:{cellWidth:32}},
         didParseCell:function(d){
           if(d.section==='body'&&d.column.index===3){d.cell.styles.fontStyle='bold';d.cell.styles.textColor=d.cell.raw==='OK'?[0,99,0]:[168,41,41]}
+=======
+        head:[['Placa','Data da validação','Observação','Motivo','Resultado','Erro']],
+        body:rows.map(function(r){return [r.placa,fmtData(r.data),r.obs,r.motivo,r.ok?'OK':'NOK',r.erros.join(' + ')]}),
+        styles:{font:'helvetica',fontSize:8,cellPadding:1.6,textColor:[11,11,11],lineColor:[225,224,217],lineWidth:.1},
+        headStyles:{fillColor:[240,239,236],textColor:[82,81,78],fontStyle:'bold'},
+        columnStyles:{0:{fontStyle:'bold',cellWidth:28},1:{cellWidth:36},4:{cellWidth:22},5:{cellWidth:32}},
+        didParseCell:function(d){
+          if(d.section==='body'&&d.column.index===4){d.cell.styles.fontStyle='bold';d.cell.styles.textColor=d.cell.raw==='OK'?[0,99,0]:[168,41,41]}
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
         }
       });
     }
@@ -366,14 +412,38 @@ $('fPlaca').addEventListener('input',onFilter);
 $('btnLimpar').addEventListener('click',function(){
   limparFiltros();renderAll();
 });
+<<<<<<< HEAD
+=======
+$('exigirTraco').addEventListener('change',function(){
+  state.exigirTraco=this.checked;
+  try{localStorage.setItem('exigirTraco',this.checked?'1':'0')}catch(e){}
+  renderRegra();renderAll();
+});
+$('btnImportar').addEventListener('click',function(){$('arquivo').value='';$('arquivo').click()});
+$('arquivo').addEventListener('change',async function(){
+  var f=this.files&&this.files[0];if(!f)return;
+  try{
+    var res=parseSheet(await f.arrayBuffer());
+    if(res.erro){toast(res.erro,true);return}
+    if(!res.rows.length){toast('Nenhuma linha válida nesse arquivo.',true);return}
+    cache[state.cur]={rows:res.rows,loaded:true,origem:'local',fonte:'Planilha aberta neste navegador ('+f.name+'): '+res.rows.length+' registros'};exibir();
+    toast('Planilha aberta: '+res.rows.length+' registros.');
+  }catch(e){toast('Não consegui ler esse arquivo. Use .xlsx ou .csv.',true)}
+});
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
 $('btnRecarregar').addEventListener('click',function(){carregarRepo()});
 $('btnPdf').addEventListener('click',baixarPdf);
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('.tab');if(b)trocarCliente(b.getAttribute('data-id'))});
 window.addEventListener('hashchange',function(){trocarCliente(location.hash.slice(1),true)});
 $('btnExportar').addEventListener('click',function(){
   var q=function(s){s=String(s==null?'':s);return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+<<<<<<< HEAD
   var linhas=['Identificador;Data Validação;Motivo;Resultado;Erro'].concat(lastRows.slice().sort(function(a,b){return a.data<b.data?1:-1}).map(function(r){
     return [r.placa,fmtData(r.data),r.motivo,r.ok?'OK':'NOK',r.erros.join(' + ')].map(q).join(';')}));
+=======
+  var linhas=['Identificador;Data Validação;Observação;Motivo;Resultado;Erro'].concat(lastRows.slice().sort(function(a,b){return a.data<b.data?1:-1}).map(function(r){
+    return [r.placa,fmtData(r.data),r.obs,r.motivo,r.ok?'OK':'NOK',r.erros.join(' + ')].map(q).join(';')}));
+>>>>>>> c27f949ce6e6bd391e92d872cc2e767c0f9f6d7e
   var blob=new Blob(['﻿'+linhas.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='validacao-ia-'+state.cur+'-filtro.csv';document.body.appendChild(a);a.click();a.remove();
