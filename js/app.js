@@ -7,8 +7,9 @@ var CLIENTES=[   // para incluir outro cliente: acrescente uma linha aqui e colo
   {id:'ambev-spot-t1',nome:'AMBEV SPOT T1',arquivo:'dados/ambev-spot-t1.xlsx'}
 ];
 var cache={};
-var ERROS=['Traseira','Lateral','Frente','Ambos'];
-var ERRCOR={Traseira:'var(--s1)',Lateral:'var(--s2)',Frente:'var(--s3)',Ambos:'var(--s4)'};
+var ERROS=['Traseira','Lateral','Frente','Ambos','Pendente'];
+var SINONIMOS={Pendente:['pendente','pedente', 'bug']};
+var ERRCOR={Traseira:'var(--s1)',Lateral:'var(--s2)',Frente:'var(--s3)',Ambos:'var(--s4)', Pendente:'var(--s5)'};
 var MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 var PAGE=50;
 var $=function(id){return document.getElementById(id)};
@@ -23,7 +24,7 @@ function normPlaca(s){return String(s==null?'':s).toUpperCase().replace(/[^A-Z0-
 function classify(obs){
   var n=norm(obs).trim();
   if(!n) return {ok:true,erros:[]};
-  var erros=ERROS.filter(function(e){return n.indexOf(norm(e))>=0});
+  var erros=ERROS.filter(function(e){return (SINONIMOS[e]||[norm(e)]).some(function(t){return n.indexOf(t)>=0})});
   return {ok:erros.length===0,erros:erros};
 }
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
